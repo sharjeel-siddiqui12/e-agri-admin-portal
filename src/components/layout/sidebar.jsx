@@ -77,9 +77,9 @@ export function Sidebar({ className, collapsed, setCollapsed }) {
       {/* Logo section */}
       <div className={styles.logoSection}>
         <Link 
-          href="/dashboard" 
+          href="/person-category-setup" 
           className={styles.logoLink}
-          onClick={() => setActivePage("Dashboard")}
+          onClick={() => setActivePage("Person Category Setup")}
         >
           <Image
             src="/logo.svg"
