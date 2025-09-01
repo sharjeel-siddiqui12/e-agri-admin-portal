@@ -7,7 +7,7 @@ const NavigationContext = createContext({});
 
 // Map routes to page titles - update this based on your actual routes
 const routeTitleMap = {
-  "/": "Dashboard",
+  "/": "Person Category Setup",
   "/login": "Login",
   "/dashboard": "Dashboard",
   // Master Data routes
