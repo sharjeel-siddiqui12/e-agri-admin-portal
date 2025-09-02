@@ -7,17 +7,32 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import styles from "./kycDocument.module.css";
+import styles from "./kycMapping.module.css";
 
 const initialTableData = [
   {
     id: 1,
-    docId: "1",
-    documentName: "CNIC- Front",
-    maxUploadSize: "5",
-    fileType: ".jpg, .png, .pdf",
-    isMandatory: "Specific",
-    activeStatus: "Yes",
+    kycMapId: "10-01-1",
+    documentType: "CNIC - Front",
+    personType: "Individual",
+    subCategory: "Single",
+    scsCategory: "Farmer",
+    isMandatory: "Yes",
+    isActive: "Yes",
+    createdDate: "01-01-2025 12:00:00",
+    lastModifiedDate: "01-01-2025 12:00:00",
+    approvedBy: "@Shahzad",
+    status: "Pending"
+  },
+  {
+    id: 2,
+    kycMapId: "10-01-2",
+    documentType: "CNIC - Back",
+    personType: "Individual",
+    subCategory: "Single",
+    scsCategory: "Farmer",
+    isMandatory: "Yes",
+    isActive: "Yes",
     createdDate: "01-01-2025 12:00:00",
     lastModifiedDate: "01-01-2025 12:00:00",
     approvedBy: "@Shahzad",
@@ -25,48 +40,66 @@ const initialTableData = [
   }
 ];
 
-const fileTypeOptions = [
-  { value: "jpg", label: "JPG" },
-  { value: "png", label: "PNG" },
-  { value: "pdf", label: "PDF" },
-  { value: "doc", label: "DOC" },
-  { value: "docx", label: "DOCX" }
+// Demo data for dropdowns (only approved items)
+const approvedDocumentTypes = [
+  { value: "CNIC Front", label: "CNIC Front" },
+  { value: "CNIC Back", label: "CNIC Back" },
+  { value: "Zarat Passbook", label: "Zarat Passbook" },
+  { value: "Agriculture Passbook", label: "Agriculture Passbook" }
 ];
 
-export default function KYCDocumentSetupPage() {
+const approvedPersonTypes = [
+  { value: "Individual", label: "Individual" },
+  { value: "Corporate", label: "Corporate" }
+];
+
+const approvedSubCategories = [
+  { value: "Single", label: "Single" },
+  { value: "Private", label: "Private" },
+  { value: "Public-Listed", label: "Public-Listed" }
+];
+
+const approvedSCSCategories = [
+  { value: "Farmer", label: "Farmer" },
+  { value: "Trader", label: "Trader" },
+  { value: "Agri-Input Vendor", label: "Agri-Input Vendor" }
+];
+
+export default function KYCDocumentMappingPage() {
   const [tableData, setTableData] = useState(initialTableData);
-  const [selectedFileTypes, setSelectedFileTypes] = useState(['jpg', 'png', 'pdf']);
+  const [selectedDocumentTypes, setSelectedDocumentTypes] = useState(['CNIC Front', 'CNIC Back', 'Zarat Passbook']);
   
-  // Calculate initial KYC Document ID based on existing data
-  const getNextDocumentId = () => {
-    if (tableData.length === 0) return "5";
-    return (Math.max(...tableData.map(item => parseInt(item.docId))) + 1).toString();
+  // Calculate initial KYC Document Mapping ID based on existing data
+  const getNextMappingId = () => {
+    if (tableData.length === 0) return "10-01-1";
+    return "10-01-1"; // Fixed ID as shown in the image
   };
   
   const [formData, setFormData] = useState({
-    documentId: getNextDocumentId(),
-    documentName: "Agriculture Passbook",
-    maxUploadSize: "5",
-    fileType: "",
-    isMandatory: "No",
+    mappingId: getNextMappingId(),
+    documentType: "",
+    personType: "Individual",
+    subCategory: "Single",
+    scsCategory: "Farmer",
+    isMandatory: "Yes",
     activeStatus: "Yes"
   });
 
-  const handleFileTypeSelect = (value) => {
-    if (!selectedFileTypes.includes(value)) {
-      setSelectedFileTypes(prev => [...prev, value]);
+  const handleDocumentTypeSelect = (value) => {
+    if (!selectedDocumentTypes.includes(value)) {
+      setSelectedDocumentTypes(prev => [...prev, value]);
     }
   };
 
-  const removeFileType = (typeToRemove) => {
-    setSelectedFileTypes(prev => prev.filter(type => type !== typeToRemove));
+  const removeDocumentType = (typeToRemove) => {
+    setSelectedDocumentTypes(prev => prev.filter(type => type !== typeToRemove));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (selectedFileTypes.length === 0) {
-      alert("Please select at least one file type");
+    if (selectedDocumentTypes.length === 0) {
+      alert("Please select at least one document type");
       return;
     }
     
@@ -81,101 +114,78 @@ export default function KYCDocumentSetupPage() {
     // Get next ID (highest current ID + 1)
     const nextId = Math.max(...tableData.map(item => item.id)) + 1;
     
-    // Format file types for display
-    const formattedFileTypes = selectedFileTypes.map(type => `.${type}`).join(', ');
-    
     // Create new table entry
     const newEntry = {
       id: nextId,
-      docId: formData.documentId,
-      documentName: formData.documentName,
-      maxUploadSize: formData.maxUploadSize,
-      fileType: formattedFileTypes,
+      kycMapId: formData.mappingId,
+      documentType: selectedDocumentTypes.join(', '),
+      personType: formData.personType,
+      subCategory: formData.subCategory,
+      scsCategory: formData.scsCategory,
       isMandatory: formData.isMandatory,
-      activeStatus: formData.activeStatus,
+      isActive: formData.activeStatus,
       createdDate: formattedDate,
       lastModifiedDate: formattedDate,
       approvedBy: "@Shahzad",
-      status: "Approved"
+      status: "Pending"
     };
     
     // Add to table data
     setTableData(prev => [...prev, newEntry]);
     
     // Reset form and generate new ID
-    const newDocumentId = (parseInt(formData.documentId) + 1).toString();
     setFormData({
-      documentId: newDocumentId,
-      documentName: "",
-      maxUploadSize: "5",
-      fileType: "",
-      isMandatory: "No",
+      mappingId: "10-01-1",
+      documentType: "",
+      personType: "Individual",
+      subCategory: "Single",
+      scsCategory: "Farmer",
+      isMandatory: "Yes",
       activeStatus: "Yes"
     });
-    setSelectedFileTypes([]);
+    setSelectedDocumentTypes([]);
     
     console.log('Form submitted and added to table:', newEntry);
   };
 
   const handleCancel = () => {
-    // Generate next available ID for the form
-    const nextId = getNextDocumentId();
+    // Reset form
     setFormData({
-      documentId: nextId,
-      documentName: "",
-      maxUploadSize: "5",
-      fileType: "",
-      isMandatory: "No",
+      mappingId: "10-01-1",
+      documentType: "",
+      personType: "Individual",
+      subCategory: "Single",
+      scsCategory: "Farmer",
+      isMandatory: "Yes",
       activeStatus: "Yes"
     });
-    setSelectedFileTypes([]);
+    setSelectedDocumentTypes([]);
   };
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.heading}>KYC Document Setup</h1>
+      <h1 className={styles.heading}>KYC Document Mapping</h1>
       
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formRow}>
-          <Label className={styles.label}>KYC Document ID</Label>
+          <Label className={styles.label}>KYC Document Mapping ID (Auto)</Label>
           <Input 
             className={`${styles.input} ${styles.inputDisabled}`}
-            value={formData.documentId}
+            value={formData.mappingId}
             disabled 
             readOnly
           />
         </div>
         
         <div className={styles.formRow}>
-          <Label className={styles.label}>Document Name</Label>
-          <Input
-            className={styles.input}
-            value={formData.documentName}
-            onChange={(e) => setFormData(prev => ({ ...prev, documentName: e.target.value }))}
-            placeholder="Enter document name"
-          />
-        </div>
-        
-        <div className={styles.formRow}>
-          <Label className={styles.label}>Max Upload Size (MBs)</Label>
-          <Input
-            className={styles.input}
-            value={formData.maxUploadSize}
-            onChange={(e) => setFormData(prev => ({ ...prev, maxUploadSize: e.target.value }))}
-            placeholder="Enter max upload size"
-            type="number"
-          />
-        </div>
-        
-        <div className={styles.formRow}>
-          <Label className={styles.label}>File Type</Label>
-          <div className={styles.fileTypeContainer}>
-            <Select onValueChange={handleFileTypeSelect}>
+          <Label className={styles.label}>Document Type</Label>
+          <div className={styles.documentTypeContainer}>
+            <Select onValueChange={handleDocumentTypeSelect}>
               <SelectTrigger className={styles.input}>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {fileTypeOptions.map(option => (
+                {approvedDocumentTypes.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -183,14 +193,14 @@ export default function KYCDocumentSetupPage() {
               </SelectContent>
             </Select>
             
-            {selectedFileTypes.length > 0 && (
-              <div className={styles.fileTypeTags}>
-                {selectedFileTypes.map(type => (
-                  <div key={type} className={styles.fileTypeTag}>
+            {selectedDocumentTypes.length > 0 && (
+              <div className={styles.documentTypeTags}>
+                {selectedDocumentTypes.map(type => (
+                  <div key={type} className={styles.documentTypeTag}>
                     <span>{type}</span>
                     <button
                       type="button"
-                      onClick={() => removeFileType(type)}
+                      onClick={() => removeDocumentType(type)}
                       className={styles.removeTagBtn}
                     >
                       <X size={12} />
@@ -203,7 +213,72 @@ export default function KYCDocumentSetupPage() {
         </div>
         
         <div className={styles.formRow}>
-          <Label className={styles.label}>Is Mandatory for all</Label>
+          <div className={styles.labelContainer}>
+            <Label className={styles.label}>Person Type</Label>
+            <span className={styles.labelNote}>Only Approved</span>
+          </div>
+          <div className={styles.doubleSelectContainer}>
+            <Select
+              value={formData.personType}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, personType: value }))}
+            >
+              <SelectTrigger className={styles.selectInput}>
+                <SelectValue placeholder="Select person type" />
+              </SelectTrigger>
+              <SelectContent>
+                {approvedPersonTypes.map(type => (
+                  <SelectItem key={type.value} value={type.value}>
+                    {type.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <div className={styles.subCategoryContainer}>
+              <Label className={styles.subLabel}>Sub-Category</Label>
+              <Select
+                value={formData.subCategory}
+                onValueChange={(value) => setFormData(prev => ({ ...prev, subCategory: value }))}
+              >
+                <SelectTrigger className={styles.selectInput}>
+                  <SelectValue placeholder="Select sub-category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {approvedSubCategories.map(category => (
+                    <SelectItem key={category.value} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+        
+        <div className={styles.formRow}>
+          <div className={styles.labelContainer}>
+            <Label className={styles.label}>SCS Category</Label>
+            <span className={styles.labelNote}>Only Approved</span>
+          </div>
+          <Select
+            value={formData.scsCategory}
+            onValueChange={(value) => setFormData(prev => ({ ...prev, scsCategory: value }))}
+          >
+            <SelectTrigger className={styles.input}>
+              <SelectValue placeholder="Select SCS category" />
+            </SelectTrigger>
+            <SelectContent>
+              {approvedSCSCategories.map(category => (
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div className={styles.formRow}>
+          <Label className={styles.label}>Is Mandatory?</Label>
           <RadioGroup
             value={formData.isMandatory}
             onValueChange={(value) => setFormData(prev => ({ ...prev, isMandatory: value }))}
@@ -253,12 +328,13 @@ export default function KYCDocumentSetupPage() {
           <TableHeader>
             <TableRow>
               <TableHead className={styles.th}>Action</TableHead>
-              <TableHead className={styles.th}>Doc ID</TableHead>
-              <TableHead className={styles.th}>Document Name</TableHead>
-              <TableHead className={styles.th}>Max Upload Size (MBs)</TableHead>
-              <TableHead className={styles.th}>File Type</TableHead>
-              <TableHead className={styles.th}>Is Mandatory for all</TableHead>
-              <TableHead className={styles.th}>Active Status</TableHead>
+              <TableHead className={styles.th}>KYC Map ID</TableHead>
+              <TableHead className={styles.th}>Document Type</TableHead>
+              <TableHead className={styles.th}>Person Type</TableHead>
+              <TableHead className={styles.th}>Sub-Category</TableHead>
+              <TableHead className={styles.th}>SCS Category</TableHead>
+              <TableHead className={styles.th}>Is Mandatory?</TableHead>
+              <TableHead className={styles.th}>Is Active?</TableHead>
               <TableHead className={styles.th}>Created date</TableHead>
               <TableHead className={styles.th}>Last Modified date</TableHead>
               <TableHead className={styles.th}>Approved by</TableHead>
@@ -273,17 +349,18 @@ export default function KYCDocumentSetupPage() {
                     <Pencil size={16} />
                   </button>
                 </TableCell>
-                <TableCell className={styles.td}>{row.docId}</TableCell>
-                <TableCell className={styles.td}>{row.documentName}</TableCell>
-                <TableCell className={styles.td}>{row.maxUploadSize}</TableCell>
-                <TableCell className={styles.td}>{row.fileType}</TableCell>
+                <TableCell className={styles.td}>{row.kycMapId}</TableCell>
+                <TableCell className={styles.td}>{row.documentType}</TableCell>
+                <TableCell className={styles.td}>{row.personType}</TableCell>
+                <TableCell className={styles.td}>{row.subCategory}</TableCell>
+                <TableCell className={styles.td}>{row.scsCategory}</TableCell>
                 <TableCell className={styles.td}>{row.isMandatory}</TableCell>
-                <TableCell className={styles.td}>{row.activeStatus}</TableCell>
+                <TableCell className={styles.td}>{row.isActive}</TableCell>
                 <TableCell className={styles.td}>{row.createdDate}</TableCell>
                 <TableCell className={styles.td}>{row.lastModifiedDate}</TableCell>
                 <TableCell className={styles.td}>{row.approvedBy}</TableCell>
                 <TableCell className={styles.td}>
-                  <span className={`${styles.statusBadge} ${row.status === "Approved" ? styles.approved : styles.rejected}`}>
+                  <span className={`${styles.statusBadge} ${row.status === "Approved" ? styles.approved : styles.pending}`}>
                     {row.status}
                   </span>
                 </TableCell>
