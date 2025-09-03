@@ -116,70 +116,75 @@ export default function CommodityGradeSpecificationApprovalPage() {
 	return (
 		<div className={styles.page}>
 			<h1 className={styles.heading}>Commodity Grade Specification - Approval</h1>
-			<div className={styles.tableWrap}>
-				<table className={styles.table}>
-					<thead>
-						<tr className={styles.tr}>
-							<th className={styles.th}>
-								<input
-									type="checkbox"
-									checked={selectAll}
-									onChange={e => handleSelectAll(e.target.checked)}
-									className={styles.checkbox}
-								/> Select
-							</th>
-							<th className={styles.th}>Commodity</th>
-							<th className={styles.th}>Commodity Grade</th>
-							<th className={styles.th}>Grading Parameter</th>
-							<th className={styles.th}>Value</th>
-							<th className={styles.th}>Measurement</th>
-							<th className={styles.th}>Method</th>
-							<th className={styles.th}>Mandatory</th>
-							<th className={styles.th}>Active</th>
-							<th className={styles.th}>Created date</th>
-							<th className={styles.th}>Last Modified date</th>
-							<th className={styles.th}>Approved by</th>
-							<th className={styles.th}>Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						{pendingData.map(row => (
-							<tr key={row.id} className={styles.tr}>
-								<td className={styles.td}>
-									<input
-										type="checkbox"
-										checked={row.selected}
-										onChange={e => handleSelectItem(row.id, e.target.checked)}
-										className={styles.checkbox}
-									/>
-								</td>
-								<td className={styles.td}>{row.commodity}</td>
-								<td className={styles.td}>{row.commodityGrade}</td>
-								<td className={styles.td}>{row.gradingParameter}</td>
-								<td className={styles.td}>{row.value}</td>
-								<td className={styles.td}>{row.measurement}</td>
-								<td className={styles.td}>{row.method}</td>
-								<td className={styles.td}>{row.mandatory}</td>
-								<td className={styles.td}>{row.active}</td>
-								<td className={styles.td}>{row.createdDate}</td>
-								<td className={styles.td}>{row.lastModifiedDate}</td>
-								<td className={styles.td}>{row.approvedBy}</td>
-								<td className={styles.td}>
-									<span className={`${styles.statusBadge} ${row.status === "Approved" ? styles.approved : styles.pending}`}>{row.status}</span>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			</div>
-			<div className={styles.actionButtons}>
-				<button className={styles.approveBtn} onClick={handleApprove}>
-					<Check className={styles.buttonIcon} /> Approve
-				</button>
-				<button className={styles.rejectBtn} onClick={handleReject}>
-					<X className={styles.buttonIcon} /> Reject
-				</button>
-			</div>
+			{/* Only show pending approval table and buttons if there are pending items */}
+			{pendingData.length > 0 && (
+				<>
+					<div className={styles.tableWrap}>
+						<table className={styles.table}>
+							<thead>
+								<tr className={styles.tr}>
+									<th className={styles.th}>
+										<input
+											type="checkbox"
+											checked={selectAll}
+											onChange={e => handleSelectAll(e.target.checked)}
+											className={styles.checkbox}
+										/> Select
+									</th>
+									<th className={styles.th}>Commodity</th>
+									<th className={styles.th}>Commodity Grade</th>
+									<th className={styles.th}>Grading Parameter</th>
+									<th className={styles.th}>Value</th>
+									<th className={styles.th}>Measurement</th>
+									<th className={styles.th}>Method</th>
+									<th className={styles.th}>Mandatory</th>
+									<th className={styles.th}>Active</th>
+									<th className={styles.th}>Created date</th>
+									<th className={styles.th}>Last Modified date</th>
+									<th className={styles.th}>Approved by</th>
+									<th className={styles.th}>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								{pendingData.map(row => (
+									<tr key={row.id} className={styles.tr}>
+										<td className={styles.td}>
+											<input
+												type="checkbox"
+												checked={row.selected}
+												onChange={e => handleSelectItem(row.id, e.target.checked)}
+												className={styles.checkbox}
+											/>
+										</td>
+										<td className={styles.td}>{row.commodity}</td>
+										<td className={styles.td}>{row.commodityGrade}</td>
+										<td className={styles.td}>{row.gradingParameter}</td>
+										<td className={styles.td}>{row.value}</td>
+										<td className={styles.td}>{row.measurement}</td>
+										<td className={styles.td}>{row.method}</td>
+										<td className={styles.td}>{row.mandatory}</td>
+										<td className={styles.td}>{row.active}</td>
+										<td className={styles.td}>{row.createdDate}</td>
+										<td className={styles.td}>{row.lastModifiedDate}</td>
+										<td className={styles.td}>{row.approvedBy}</td>
+										<td className={styles.td}>
+											<span className={`${styles.statusBadge} ${row.status === "Approved" ? styles.approved : styles.pending}`}>{row.status}</span>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+					<div className={styles.actionButtons}>
+						<button className={styles.approveBtn} onClick={handleApprove}>
+							<Check className={styles.buttonIcon} /> Approve
+						</button>
+						<button className={styles.rejectBtn} onClick={handleReject}>
+							<X className={styles.buttonIcon} /> Reject
+						</button>
+					</div>
+				</>
+			)}
 			<h2 className={styles.sectionHeading}>Approved</h2>
 			<div className={styles.tableWrap}>
 				<table className={styles.table}>

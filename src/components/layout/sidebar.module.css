@@ -104,19 +104,21 @@
 .sectionItems {
   display: flex;
   flex-direction: column;
+ 
 }
 
 .navItem {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 2px 12px;
+  margin: 2px 20px;
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 0.85rem;
   transition: all 0.2s ease;
   color: #000000;
   position: relative;
+  
 }
 
 .collapsedItem {
