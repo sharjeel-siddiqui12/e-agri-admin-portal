@@ -40,6 +40,7 @@ const masterDataItems = [
   { name: "Grade Definition", icon: Award, href: "/grade-definition" },
   { name: "Grading Parameters", icon: BarChart3, href: "/grading-parameters" },
   { name: "Commodity Classification", icon: BookOpen, href: "/commodity-classification" },
+  { name: "Commodity Classification Approval", icon: BookOpen, href: "/commodity-classification-approval" },
   { name: "Commodity Grade Specification", icon: Calculator, href: "/commodity-grade-specification" },
   { name: "Commodity Grade Specification - Approval", icon: PenTool, href: "/commodity-grade-specification-approval" },
 ];

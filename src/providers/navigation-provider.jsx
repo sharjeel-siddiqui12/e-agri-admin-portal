@@ -25,6 +25,7 @@ const routeTitleMap = {
   "/grade-definition": "Grade Definition",
   "/grading-parameters": "Grading Parameters",
   "/commodity-classification": "Commodity Classification",
+  "/commodity-classification-approval": "Commodity Classification - Approval",
   "/commodity-grade-specification": "Commodity Grade Specification",
   "/commodity-grade-specification-approval": "Commodity Grade Specification - Approval",
   // Setup routes
